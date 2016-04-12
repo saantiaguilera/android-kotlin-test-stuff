@@ -21,7 +21,7 @@ import com.example.santiago.kotlintests.R
  */
 class CharCounterActivity : Activity() {
 
-    var timer: CountDownTimer = CountDownTimer(4000)
+    var timer = CountDownTimer(4000)
 
     lateinit var container: LinearLayout
     lateinit var input: EditText
@@ -52,7 +52,7 @@ class CharCounterActivity : Activity() {
     }
 
     fun addToContainer(char: Char, value: Int) {
-        val textView: TextView = TextView(this)
+        val textView = TextView(this)
         textView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 50)
         textView.text = "$char = $value"
         textView.textSize = 20f
@@ -68,7 +68,7 @@ class CharCounterActivity : Activity() {
 
         override fun onTick(millisUntilFinished: Long) {
             if(millisUntilFinished - 1000 < 3000) {
-                var animation: Animation = AnimationUtils.loadAnimation(this@CharCounterActivity, R.anim.grow_n_dissappear);
+                var animation = AnimationUtils.loadAnimation(this@CharCounterActivity, R.anim.grow_n_dissappear);
                 animation.setAnimationListener(object : Animation.AnimationListener {
                     override fun onAnimationEnd(animation: Animation?) {
                         counter.visibility = View.INVISIBLE
@@ -93,6 +93,7 @@ class CharCounterActivity : Activity() {
                     .groupBy { it }
                     .forEach { it -> addToContainer(it.key, it.value.size) }
         }
+
     }
 
 }
