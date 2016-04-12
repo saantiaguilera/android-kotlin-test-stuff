@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">KotlinTests</string>
+
+    <string name="write_here">Write here</string>
+
+    <string name="letter_counter">Letter counter</string>
 </resources>
