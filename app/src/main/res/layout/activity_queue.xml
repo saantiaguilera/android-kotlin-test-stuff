@@ -7,17 +7,12 @@
 
     android:background="@color/white">
 
-    <TextView
-        android:id="@+id/activity_queue_message"
+    <com.example.santiago.kotlintests.queue_list.recycler.view.QueueListView
+        android:id="@+id/activity_queue_recyclerview"
 
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-
-        android:gravity="center"
-
-        android:textColor="@color/black"
-        android:textSize="20sp"/>
+        android:layout_weight="1"/>
 
     <View
         android:layout_width="match_parent"

@@ -40,10 +40,10 @@ class CharCounterActivity : Activity() {
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            override fun afterTextChanged(s: Editable?) {
-                timer.cancel()
-
-                timer.start()
+            override fun afterTextChanged(s: Editable?) = timer.run {
+                cancel()
+                start()
+                return
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -52,16 +52,15 @@ class CharCounterActivity : Activity() {
     }
 
     fun addToContainer(char: Char, value: Int) {
-        val textView = TextView(this)
-        textView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 50)
-        textView.text = "$char = $value"
-        textView.textSize = 20f
-        textView.gravity = Gravity.CENTER
+        container.addView(TextView(this).apply {
+            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 50)
+            text = "$char = $value"
+            textSize = 20f
+            gravity = Gravity.CENTER
 
-        textView.setBackgroundColor(if(container.childCount % 2 == 0) getResources().getColor(R.color.black) else getResources().getColor(R.color.white))
-        textView.setTextColor(if(container.childCount % 2 == 1) getResources().getColor(R.color.black) else getResources().getColor(R.color.white))
-
-        container.addView(textView)
+            setBackgroundColor(getResources().getColor(if(container.childCount % 2 == 0) R.color.black else R.color.white))
+            setTextColor(getResources().getColor(if(container.childCount % 2 == 1) R.color.black else R.color.white))
+        })
     }
 
     inner class CountDownTimer(time: Long) : android.os.CountDownTimer(time, 1000) {

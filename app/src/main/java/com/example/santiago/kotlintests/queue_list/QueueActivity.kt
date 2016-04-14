@@ -4,18 +4,21 @@ import android.app.Activity
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
+import com.example.santiago.my_java_libs.event.EventManager
 import com.example.santiago.kotlintests.R
-import java.util.*
+import com.example.santiago.kotlintests.queue_list.event.NewTaskEvent
+import com.example.santiago.kotlintests.queue_list.recycler.controller.QueueListController
+import com.example.santiago.kotlintests.queue_list.recycler.view.QueueListView
 
 /**
  * Created by santiago on 11/04/16.
  */
 class QueueActivity : Activity() {
 
-    val queue: Queue<String> = ArrayDeque<String>()
+    val eventManager = EventManager(this)
 
-    lateinit var currentMessage: TextView
+    val queueListController = QueueListController(this)
+
     lateinit var input: EditText
     lateinit var submit: ImageView
 
@@ -24,26 +27,17 @@ class QueueActivity : Activity() {
 
         setContentView(R.layout.activity_queue)
 
-        currentMessage = findViewById(R.id.activity_queue_message) as TextView
+        queueListController.attachElement(findViewById(R.id.activity_queue_recyclerview) as QueueListView)
+        queueListController.setEventHandlerListener(eventManager)
+
         input = findViewById(R.id.activity_queue_edittext) as EditText
         submit = findViewById(R.id.activity_queue_send) as ImageView
 
-        submit.setOnClickListener { v -> submit(input.text.toString()) }
-        currentMessage.setOnClickListener { v -> if(!queue.isEmpty()) deque() }
-    }
-
-    fun deque() {
-        currentMessage.text = queue.poll()
-
-        queue.add(currentMessage.text.toString())
-    }
-
-    fun submit(text: String?) {
-        currentMessage.text = text
-
-        queue.add(text)
-
-        input.setText("")
+        submit.setOnClickListener {
+            v ->
+            eventManager.broadcastEvent(NewTaskEvent(input.text.toString()))
+            input.text.clear()
+        }
     }
 
 }
