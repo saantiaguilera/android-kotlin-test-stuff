@@ -30,7 +30,6 @@ class QueueListAdapter : BaseController<BaseRecyclerAdapter<TaskView, Task>>, Ta
                     setBlur(queue.indexOf(task) != 0)
                 }
             }
-
         })
     }
 
@@ -38,25 +37,21 @@ class QueueListAdapter : BaseController<BaseRecyclerAdapter<TaskView, Task>>, Ta
 
     override fun onRequeue() = deque()
     override fun onRemove() {
-        queue.removeAt(queue.size - 1)
+        queue.removeAt(0)
 
         element.notifyDataSetChanged()
     }
 
     private fun deque() {
-        val text = queue.removeAt(queue.size - 1)
-        queue.add(0, text)
+        val text = queue.removeAt(0)
+        queue.add(text)
 
         element.notifyDataSetChanged()
     }
 
     @EventMethod(NewTaskEvent::class)
     private fun submit(event: NewTaskEvent) {
-        Log.w("submit", event.task.id.toString() + " -- " + event.task.task)
-
         queue.add(event.task)
-
-        Log.w("submit", "queue.size = " + queue.size.toString())
 
         element.notifyDataSetChanged()
     }
