@@ -2,6 +2,7 @@ package com.example.santiago.kotlintests.queue_list.recycler.controller
 
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
+import com.example.santiago.kotlintests.queue_list.entity.Task
 import com.example.santiago.my_java_libs.controllers.BaseController
 import com.example.santiago.my_java_libs.event.EventManager
 import com.example.santiago.kotlintests.queue_list.recycler.view.QueueListView
@@ -12,7 +13,7 @@ import java.util.*
  */
 class QueueListController(context: Context) : BaseController<QueueListView>(context) {
 
-    private val layoutManager = LinearLayoutManager(context)
+    private val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
     private val adapter = QueueListAdapter(context)
 
     override fun onElementAttached(queueListView: QueueListView?) {
@@ -24,4 +25,13 @@ class QueueListController(context: Context) : BaseController<QueueListView>(cont
         super.setEventHandlerListener(eventManager)
         adapter.setEventHandlerListener(eventManager)
     }
+
+    fun getTasks(): MutableList<Task> = adapter.queue
+
+    fun setTasks(tasks: MutableList<Task>) = adapter.apply {
+        queue.clear()
+        queue.addAll(tasks)
+        element.notifyDataSetChanged()
+    }
+
 }

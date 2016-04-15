@@ -1,8 +1,9 @@
 package com.example.santiago.kotlintests.queue_list.recycler.controller
 
 import android.content.Context
-import android.view.Gravity
+import android.util.Log
 import android.view.ViewGroup
+import com.example.santiago.kotlintests.queue_list.entity.Task
 import com.example.santiago.my_java_libs.controllers.BaseController
 import com.example.santiago.my_java_libs.controllers.recycler_stuff.BaseRecyclerAdapter
 import com.example.santiago.my_java_libs.event.anotation.EventMethod
@@ -13,31 +14,27 @@ import java.util.*
 /**
  * Created by santiago on 13/04/16.
  */
-class QueueListAdapter : BaseController<BaseRecyclerAdapter<TaskView, String>>, TaskView.TaskCallback {
+class QueueListAdapter : BaseController<BaseRecyclerAdapter<TaskView, Task>>, TaskView.TaskCallback {
 
-    val queue: MutableList<String> = ArrayList()
+    var queue: MutableList<Task> = ArrayList()
 
     constructor(context: Context) : super(context) {
-        attachElement(object : BaseRecyclerAdapter<TaskView, String>(queue) {
+        attachElement(object : BaseRecyclerAdapter<TaskView, Task>(queue) {
 
             override fun createView(parent: ViewGroup?, viewType: Int): TaskView? = TaskView(getContext())
 
-            override fun bindView(textView: TaskView?, string: String?) {
-                textView?.apply {
-                    text = string
-                    textSize = 20f
-                    gravity = Gravity.CENTER
+            override fun bindView(taskView: TaskView?, task: Task?) {
+                taskView?.apply {
+                    setText(task?.task!!)
                     listener = this@QueueListAdapter
-
-                    //TODO create a data class for the message and compare id!
-                    isClickable = (queue.indexOf(string) == queue.size - 1)
+                    setBlur(queue.indexOf(task) != 0)
                 }
             }
 
         })
     }
 
-    override fun onElementAttached(t: BaseRecyclerAdapter<TaskView, String>?) { }
+    override fun onElementAttached(t: BaseRecyclerAdapter<TaskView, Task>?) { }
 
     override fun onRequeue() = deque()
     override fun onRemove() {
@@ -55,7 +52,11 @@ class QueueListAdapter : BaseController<BaseRecyclerAdapter<TaskView, String>>, 
 
     @EventMethod(NewTaskEvent::class)
     private fun submit(event: NewTaskEvent) {
+        Log.w("submit", event.task.id.toString() + " -- " + event.task.task)
+
         queue.add(event.task)
+
+        Log.w("submit", "queue.size = " + queue.size.toString())
 
         element.notifyDataSetChanged()
     }
