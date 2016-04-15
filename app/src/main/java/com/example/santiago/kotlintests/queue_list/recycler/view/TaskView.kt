@@ -1,16 +1,19 @@
 package com.example.santiago.kotlintests.queue_list.recycler.view
 
 import android.content.Context
-import android.graphics.Color
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.os.AsyncTask
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import com.commit451.nativestackblur.NativeStackBlur
 import com.example.santiago.kotlintests.R
-import jp.wasabeef.blurry.Blurry
 
 /**
  * Created by santiago on 13/04/16.
@@ -20,6 +23,7 @@ class TaskView : RelativeLayout {
     private val task by lazy { findViewById(R.id.view_task_text) as TextView }
     private val binImage by lazy { findViewById(R.id.view_task_bin) as ImageView }
     private val requeueImage by lazy { findViewById(R.id.view_task_requeue) as ImageView }
+    private val blurImage by lazy { findViewById(R.id.view_task_blur) as ImageView }
 
     private var active: Boolean = true
 
@@ -40,11 +44,15 @@ class TaskView : RelativeLayout {
 
     fun setBlur(blur: Boolean) {
         if (blur) {
-            Blurry.with(context).radius(20)
-                    .animate(800)
-                    .async()
-                    .onto(this);
-        } else Blurry.delete(this)
+            post {
+                var bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                draw(Canvas(bitmap));
+
+                blurImage.visibility = VISIBLE
+
+                blurImage.setImageBitmap(NativeStackBlur.process(bitmap, 15));
+            }
+        } else blurImage.visibility = GONE
 
         active = !blur
     }
