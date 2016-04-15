@@ -3,17 +3,14 @@ package com.example.santiago.kotlintests.queue_list.recycler.view
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.os.AsyncTask
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import com.commit451.nativestackblur.NativeStackBlur
 import com.example.santiago.kotlintests.R
+import com.example.santiago.kotlintests.queue_list.utils.BlurBuilder
 
 /**
  * Created by santiago on 13/04/16.
@@ -50,7 +47,7 @@ class TaskView : RelativeLayout {
 
                 blurImage.visibility = VISIBLE
 
-                blurImage.setImageBitmap(NativeStackBlur.process(bitmap, 15));
+                blurImage.setImageBitmap(BlurBuilder(context).blur(bitmap));
             }
         } else blurImage.visibility = GONE
 
