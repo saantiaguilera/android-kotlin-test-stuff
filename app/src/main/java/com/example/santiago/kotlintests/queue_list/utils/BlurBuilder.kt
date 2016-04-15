@@ -30,6 +30,7 @@ class BlurBuilder(val context: Context) {
 
         tmpOutput.copyTo(outputBitmap)
 
+        image.recycle()
         inputBitmap.recycle()
 
         return outputBitmap

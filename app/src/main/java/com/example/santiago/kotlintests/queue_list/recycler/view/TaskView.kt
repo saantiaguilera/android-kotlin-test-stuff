@@ -42,6 +42,8 @@ class TaskView : RelativeLayout {
     fun setBlur(blur: Boolean) {
         if (blur) {
             post {
+                blurImage.visibility = GONE
+
                 var bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
                 draw(Canvas(bitmap));
 
